@@ -150,23 +150,6 @@ python train.py
 
 ---
 
-## 📈 Results
-
-* Dataset: Flickr8k or custom pipe-separated caption dataset
-* Model produces grammatically coherent and visually relevant captions
-* Attention visualization is possible (not included here)
-
----
-
-## 🙌 Credits
-
-* **Model Design**: Based on the Show, Attend and Tell paper
-* **Libraries Used**: PyTorch, torchvision, NLTK
-* **Author**: \[Your Name]
-* **Inspired by**: Projects from Stanford CS231n, OpenAI, and image-captioning research
-
----
-
 ## 🗃️ Project Structure
 
 ```bash
