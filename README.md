@@ -1,164 +1,69 @@
 
 ---
 
-# 🖼️ Image Captioning with Attention Mechanism
+## 🧠 Image Captioning with Attention and ResNet 
 
-This project implements an **attention-based image captioning model** using **PyTorch**, where the goal is to generate natural language descriptions for images. The model uses **ResNet50** for feature extraction and an **LSTM with attention** to generate captions word-by-word.
-
----
-
-## 📌 Table of Contents
-
-* [Overview](#overview)
-* [Model Architecture](#model-architecture)
-* [Key Components](#key-components)
-* [How It Works](#how-it-works)
-* [Setup](#setup)
-* [Training](#training)
-* [Results](#results)
-* [Credits](#credits)
+This project is about teaching a computer how to look at a picture and describe it in words, like how a human would. It uses deep learning and works in two steps: first, it understands the picture using a model called **ResNet**, and then it writes a caption using another model called **LSTM with Attention**.
 
 ---
 
-## ✅ Overview
+### ✨ What This Project Does
 
-Image captioning is a challenging task that combines **computer vision** and **natural language processing**. This implementation:
-
-* Extracts features from images using **ResNet50**
-* Processes captions using a **custom Vocabulary class**
-* Trains a model using **LSTM + Attention**
-* Uses an **adaptive training loop** with optimizations like `AMP`, `Teacher Forcing`, and `Early Stopping`
+* Looks at an image
+* Understands what’s in the image
+* Writes a short sentence (caption) about the image
 
 ---
 
-## 🧠 Model Architecture
+### 🧰 Tools and Technologies Used
 
-### 1. **Feature Extractor (Encoder)**
-
-* **Model**: `ResNet50` (pretrained on ImageNet)
-* **Use**: Extracts deep feature representations from input images
-* **Why**: CNNs like ResNet are excellent at capturing visual patterns and spatial hierarchies
-
-### 2. **Attention-Based Decoder (Decoder)**
-
-* **Model**: `LSTM` with **Bahdanau-style additive attention**
-* **Use**: Generates captions word-by-word while focusing on relevant parts of the image
-* **Why**: Attention helps align the words being generated with visual regions, improving accuracy and interpretability
+* **Python** – programming language
+* **PyTorch** – deep learning library
+* **ResNet50** – used to extract image features
+* **LSTM (with Attention)** – used to generate the captions
+* **NLTK** – helps with processing words
 
 ---
 
-## 🧩 Key Components
+### 🧠 How It Works
 
-### `Vocabulary` class
-
-* Converts words ↔ indices
-* Filters rare words using `frequency_threshold`
-* Used to tokenize and detokenize captions
-
-### `load_captions()`
-
-* Loads and parses captions from dataset files
-* Handles special format: `image_name| comment_number| comment`
-
-### `ImageCaptionDataset` class
-
-* A PyTorch `Dataset` to load image-caption pairs
-* Applies transforms (resize, normalize, etc.)
-* Used by `DataLoader` for batch training
-
-### `Attention` module
-
-* Computes attention scores for image features
-* Guides the decoder to focus on the most relevant regions
-
-### `Encoder` class
-
-* Modifies ResNet to output spatial feature maps
-* Removes classification layer and freezes initial layers
-
-### `Decoder` class
-
-* Combines attention-weighted features and embeddings
-* Uses LSTM to sequentially predict words
-* Applies linear layer + softmax for output vocabulary prediction
+1. **ResNet50** looks at the image and turns it into numbers (features).
+2. **LSTM with Attention** takes those numbers and creates a sentence.
+3. The model learns by looking at thousands of image-caption pairs.
+4. After learning, it can generate captions for new images.
 
 ---
 
-## ⚙️ How It Works
+### 📁 Code Overview
 
-1. **Preprocessing**
-
-   * Resize and normalize images
-   * Tokenize and index words in captions
-
-2. **Feature Extraction**
-
-   * Feed images through ResNet50 → get 2048-dim feature maps (1×2048×7×7)
-
-3. **Caption Generation**
-
-   * At each timestep:
-
-     * Attention is computed over image features
-     * Context vector and word embedding are fed to LSTM
-     * Output is mapped to vocabulary to predict the next word
-
-4. **Loss Computation**
-
-   * CrossEntropyLoss over non-`<PAD>` tokens
-   * Supports Teacher Forcing
-
-5. **Training Loop**
-
-   * Mixed precision (`autocast`)
-   * Gradient scaling with `GradScaler`
-   * Early stopping based on validation loss
+* `Vocabulary`: Helps the model understand and convert words into numbers.
+* `Dataset`: Loads images and their captions, and prepares them for training.
+* `EncoderCNN`: Uses ResNet50 to process the images.
+* `DecoderRNN`: Uses LSTM and attention to generate captions.
+* `train.py`: Main file that runs the training.
 
 ---
 
-## 🛠️ Setup
+### 🧪 How to Run
 
-### Install Dependencies
+1. Install the libraries:
 
-```bash
-pip install torch torchvision nltk tqdm
-```
-
-### Download NLTK Tokenizer
-
-```python
-import nltk
-nltk.download('punkt')
-```
+   ```bash
+   pip install torch torchvision nltk Pillow
+   ```
+2. Put your images and captions in the dataset folder.
+3. Run `train.py` to train the model.
+4. Use the model to generate captions for new images.
 
 ---
 
-## 🏋️‍♀️ Training
+### 📸 Output Example
 
-Modify hyperparameters and run the training script:
+Input: 🖼️ (Picture of a dog playing in a park)
 
-```bash
-python train.py
-```
-
-### Key Args
-
-* `embed_size`: Dimensionality of word embeddings
-* `hidden_size`: Hidden dimension of LSTM
-* `attention_dim`: Size of attention vector
-* `batch_size`, `epochs`, `learning_rate`: Training controls
-
+Output: `"A dog is running on the grass"`
 ---
+### Screenshots
 
-## 🗃️ Project Structure
-
-```bash
-📦image-captioning
- ┣ 📜train.py                # Main training script
- ┣ 📜vocab.pkl               # Saved vocabulary
- ┣ 📜caption_model.pth       # Trained model weights
- ┣ 📂images/                 # Raw input images
- ┣ 📂captions/               # Pipe-separated caption files
- ┗ 📜README.md               # Project documentation
-```
+<img width="1878" height="1041" alt="22 07 2025_17 40 12_REC" src="https://github.com/user-attachments/assets/6eb824b6-b71a-4342-a212-74597d0624e3" />
 
